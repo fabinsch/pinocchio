@@ -25,14 +25,14 @@ def impulseDynamics(model, data, *args):
     updateKinematics = args[4]
     inv_damping = 0.
     if updateKinematics:
-      return pin.impulseDynamics(model,data,q,v_before,J,r_coeff,inv_damping)
+      return pin.algorithm.impulseDynamics(model,data,q,v_before,J,r_coeff,inv_damping)
     else:
-      return pin.impulseDynamics(model,data,v_before,J,r_coeff,inv_damping)
+      return pin.algorithm.impulseDynamics(model,data,v_before,J,r_coeff,inv_damping)
 
-  return pin.impulseDynamics(model, data, *args)
+  return pin.algorithm.impulseDynamics(model, data, *args)
 
 impulseDynamics.__doc__ =  (
-  pin.impulseDynamics.__doc__
+  pin.algorithm.impulseDynamics.__doc__
   + '\n\nimpulseDynamics( (Model)Model, (Data)Data, (object)Joint configuration q (size Model::nq), (object)Joint velocity before impact v_before (size Model::nv), (object)Contact Jacobian J (size nb_constraint * Model::nv), (float)Coefficient of restitution r_coeff (0 = rigid impact; 1 = fully elastic impact), (bool)updateKinematics) -> object :'
   + '\n    This function signature has been deprecated and will be removed in future releases of Pinocchio.'
 )
@@ -52,41 +52,41 @@ def forwardDynamics(model, data, *args):
     inv_damping = args[5]
     updateKinematics = args[6]
     if updateKinematics:
-      return pin.forwardDynamics(model,data,q,v,tau,J,gamma,inv_damping)
+      return pin.algorithm.forwardDynamics(model,data,q,v,tau,J,gamma,inv_damping)
     else:
-      return pin.forwardDynamics(model,data,tau,J,gamma,inv_damping)
+      return pin.algorithm.forwardDynamics(model,data,tau,J,gamma,inv_damping)
 
-  return pin.forwardDynamics(model, data, *args)
+  return pin.algorithm.forwardDynamics(model, data, *args)
 
 forwardDynamics.__doc__ = (
-  pin.forwardDynamics.__doc__
+  pin.algorithm.forwardDynamics.__doc__
   + '\n\nforwardDynamics( (Model)Model, (Data)Data, (object)Joint configuration q (size Model::nq), (object)Joint velocity v (size Model::nv), (object)Joint torque tau (size Model::nv), (object)Contact Jacobian J (size nb_constraint * Model::nv), (object)Contact drift gamma (size nb_constraint), (float)(double) Damping factor for cholesky decomposition of JMinvJt. Set to zero if constraints are full rank, (bool)Update kinematics) -> object :'
 + '\n    This function signature has been deprecated and will be removed in future releases of Pinocchio.'
 )
 
 @deprecated("This function has been renamed computeJointJacobian and will be removed in future releases of Pinocchio. Please change for new computeJointJacobian.")
 def jointJacobian(model, data, q, jointId):
-  return pin.computeJointJacobian(model,data,q,jointId)
+  return pin.algorithm.computeJointJacobian(model,data,q,jointId)
 
 @deprecated("This function has been renamed computeFrameJacobian and will be removed in future releases of Pinocchio. Please change for new computeFrameJacobian.")
 def frameJacobian(model, data, q, frameId):
-  return pin.computeFrameJacobian(model,data,q,frameId)
+  return pin.algorithm.computeFrameJacobian(model,data,q,frameId)
 
 def computeCentroidalDynamics(model, data, q, v, a = None):
   if a is None:
     message = ("This function signature has been renamed and will be removed in future releases of Pinocchio. "
                "Please change for the new signature of computeCentroidalMomentum(model,data,q,v).")
     _warnings.warn(message, category=DeprecatedWarning, stacklevel=2)
-    return pin.computeCentroidalMomentum(model,data,q,v)
+    return pin.algorithm.computeCentroidalMomentum(model,data,q,v)
   else:
     message = ("This function signature has been renamed and will be removed in future releases of Pinocchio. "
                "Please change for the new signature of computeCentroidalMomentumTimeVariation(model,data,q,v,a).")
     _warnings.warn(message, category=DeprecatedWarning, stacklevel=2)
-    return pin.computeCentroidalMomentum(model,data,q,v,a)
+    return pin.algorithm.computeCentroidalMomentum(model,data,q,v,a)
 
 computeCentroidalDynamics.__doc__ = ( "This function has been renamed computeCentroidalMomentum or computeCentroidalMomentumTimeVariation to either only compute the centroidal momentum quantity or also its time derivative respectively." )
 
-class GeometryObject(pin.GeometryObject):
+class GeometryObject(pin.geometry.GeometryObject):
     @property
     @deprecated("The fcl property has been renamed geometry. Please use GeometryObject.geometry instead")
     def fcl(self):
@@ -126,32 +126,32 @@ def buildGeomFromUrdf(model, filename, *args, **kwargs):
     return pin.buildGeomFromUrdf(model, filename, *args, **kwargs)
 
 buildGeomFromUrdf.__doc__ = (
-  pin.buildGeomFromUrdf.__doc__
+  pin.parser.buildGeomFromUrdf.__doc__
 )
 
 @deprecated("This function is now deprecated and will be removed in future releases of Pinocchio. "
             "Please change for the new function computePotentialEnergy.")
 def potentialEnergy(model,data,q,update_kinematics=True):
   if update_kinematics:
-    return pin.computePotentialEnergy(model,data,q)
+    return pin.algorithm.computePotentialEnergy(model,data,q)
   else:
-    return pin.computePotentialEnergy(model,data)
+    return pin.algorithm.computePotentialEnergy(model,data)
 
-potentialEnergy.__doc__ += '\n' + pin.computePotentialEnergy.__doc__
+potentialEnergy.__doc__ += '\n' + pin.algorithm.computePotentialEnergy.__doc__
 
 @deprecated("This function is now deprecated and will be removed in future releases of Pinocchio. "
             "Please change for the new function computeKineticEnergy.")
 def kineticEnergy(model,data,q,v,update_kinematics=True):
   if update_kinematics:
-    return pin.computeKineticEnergy(model,data,q,v)
+    return pin.algorithm.computeKineticEnergy(model,data,q,v)
   else:
-    return pin.computeKineticEnergy(model,data)
+    return pin.algorithm.computeKineticEnergy(model,data)
 
-kineticEnergy.__doc__ += '\n' + pin.computeKineticEnergy.__doc__
+kineticEnergy.__doc__ += '\n' + pin.algorithm.computeKineticEnergy.__doc__
 
 from .utils import npToTTuple, npToTuple
-pin.rpy.npToTTuple = deprecated("This function was moved to the utils submodule.")(npToTTuple)
-pin.rpy.npToTuple = deprecated("This function was moved to the utils submodule.")(npToTuple)
+pin.spatial.rpy.npToTTuple = deprecated("This function was moved to the utils submodule.")(npToTTuple)
+pin.spatial.rpy.npToTuple = deprecated("This function was moved to the utils submodule.")(npToTuple)
 
 # Marked as deprecated on 26 Mar 2020
 @deprecated("This function is now deprecated without replacement.")
