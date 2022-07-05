@@ -10,6 +10,8 @@
 #include "pinocchio/bindings/python/utils/dependencies.hpp"
 #include "pinocchio/bindings/python/utils/conversions.hpp"
 #include "pinocchio/bindings/python/utils/registration.hpp"
+#include "pinocchio/bindings/python/utils/namespace.hpp"
+
 
 #include "pinocchio/bindings/python/utils/std-vector.hpp"
 #include "pinocchio/bindings/python/serialization/serialization.hpp"
@@ -32,11 +34,16 @@ BOOST_PYTHON_MODULE(pinocchio_pywrap)
   
   // Enable warnings
   bp::import("warnings");
+
+  {
+  // using the spatial scope
+  bp::scope current_scope = getOrCreatePythonNamespace("spatial");
   
   if(! register_symbolic_link_to_registered_type<Eigen::Quaterniond>())
     eigenpy::exposeQuaternion();
   if(! register_symbolic_link_to_registered_type<Eigen::AngleAxisd>())
     eigenpy::exposeAngleAxis();
+  }
   
   StdContainerFromPythonList< std::vector<std::string> >::register_converter();
 
@@ -50,29 +57,33 @@ BOOST_PYTHON_MODULE(pinocchio_pywrap)
   eigenpy::enableEigenPySpecific<Matrix6x>();
   eigenpy::enableEigenPySpecific<Matrix3x>();
 
-  exposeSE3();
-  exposeForce();
-  exposeMotion();
-  exposeInertia();
-  exposeJoints();
-  exposeExplog();
-  exposeRpy();
-  exposeSkew();
-  exposeLieGroups();
+  {
+    // using the spatial scope
+    bp::scope current_scope = getOrCreatePythonNamespace("spatial");
+    exposeSE3();
+    exposeForce();
+    exposeMotion();
+    exposeInertia();
+    exposeJoints();
+    exposeExplog();
+    exposeRpy();
+    exposeSkew();
+    exposeLieGroups(); 
 
-  bp::enum_< ::pinocchio::ReferenceFrame >("ReferenceFrame")
-  .value("WORLD",::pinocchio::WORLD)
-  .value("LOCAL",::pinocchio::LOCAL)
-  .value("LOCAL_WORLD_ALIGNED",::pinocchio::LOCAL_WORLD_ALIGNED)
-  .export_values()
-  ;
+    bp::enum_< ::pinocchio::ReferenceFrame >("ReferenceFrame")
+    .value("WORLD",::pinocchio::WORLD)
+    .value("LOCAL",::pinocchio::LOCAL)
+    .value("LOCAL_WORLD_ALIGNED",::pinocchio::LOCAL_WORLD_ALIGNED)
+    .export_values()
+    ;
 
-  bp::enum_< ::pinocchio::KinematicLevel >("KinematicLevel")
-  .value("POSITION",::pinocchio::POSITION)
-  .value("VELOCITY",::pinocchio::VELOCITY)
-  .value("ACCELERATION",::pinocchio::ACCELERATION)
-  .export_values()
-  ;
+    bp::enum_< ::pinocchio::KinematicLevel >("KinematicLevel")
+    .value("POSITION",::pinocchio::POSITION)
+    .value("VELOCITY",::pinocchio::VELOCITY)
+    .value("ACCELERATION",::pinocchio::ACCELERATION)
+    .export_values()
+    ;
+  }
   
   bp::enum_< ::pinocchio::ArgumentPosition>("ArgumentPosition")
   .value("ARG0",::pinocchio::ARG0)
@@ -83,11 +94,24 @@ BOOST_PYTHON_MODULE(pinocchio_pywrap)
   .export_values()
   ;
 
-  exposeModel();
-  exposeFrame();
-  exposeData();
+
+  {
+    // using the model scope
+    bp::scope current_scope = getOrCreatePythonNamespace("model");
+    exposeModel();
+  }
+  {
+    // using the frame scope
+    bp::scope current_scope = getOrCreatePythonNamespace("frame");
+    exposeFrame();
+  }
+  {
+    // using the data scope
+    bp::scope current_scope = getOrCreatePythonNamespace("data");
+    exposeData();
+  }
+
   exposeGeometry();
-  
   exposeAlgorithms();
   exposeParsers();
   exposeSerialization();
@@ -103,7 +127,12 @@ BOOST_PYTHON_MODULE(pinocchio_pywrap)
   
   exposeVersion();
   exposeDependencies();
+
+  {
+  // using the conversions scope
+  bp::scope current_scope = getOrCreatePythonNamespace("conversions");
   exposeConversions();
+  }
   
 }
  

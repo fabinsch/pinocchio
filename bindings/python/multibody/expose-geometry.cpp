@@ -7,6 +7,7 @@
 #include "pinocchio/bindings/python/multibody/geometry-model.hpp"
 #include "pinocchio/bindings/python/multibody/geometry-data.hpp"
 #include "pinocchio/bindings/python/utils/std-aligned-vector.hpp"
+#include "pinocchio/bindings/python/utils/namespace.hpp"
 
 namespace pinocchio
 {
@@ -15,6 +16,9 @@ namespace pinocchio
     
     void exposeGeometry()
     {
+      // using the geometry scope
+      bp::scope current_scope = getOrCreatePythonNamespace("geometry");
+
       GeometryObjectPythonVisitor::expose();
       StdAlignedVectorPythonVisitor<GeometryObject>::expose("StdVec_GeometryObject");
       

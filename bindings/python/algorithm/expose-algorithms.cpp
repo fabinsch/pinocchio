@@ -3,6 +3,7 @@
 //
 
 #include "pinocchio/bindings/python/algorithm/algorithms.hpp"
+#include "pinocchio/bindings/python/utils/namespace.hpp"
 
 namespace pinocchio
 {
@@ -11,6 +12,9 @@ namespace pinocchio
     
     void exposeAlgorithms()
     {
+      // using the algorithm scope
+      bp::scope current_scope = getOrCreatePythonNamespace("algorithm");
+      
       exposeJointsAlgo();
       exposeABA();
       exposeCRBA();
