@@ -1,9 +1,17 @@
 #
-# Copyright (c) 2015-2020 CNRS INRIA
+# Copyright (c) 2015-2022 CNRS INRIA
 #
 
 import numpy
 from .pinocchio_pywrap import *
+from .pinocchio_pywrap.algorithm import *
+from .pinocchio_pywrap.parser import *
+from .pinocchio_pywrap.spatial import *
+from .pinocchio_pywrap.geometry import *
+from .pinocchio_pywrap.model import *
+from .pinocchio_pywrap.data import *
+from .pinocchio_pywrap.frame import *
+from .pinocchio_pywrap.conversions import *
 
 from .pinocchio_pywrap import __version__, __raw_version__
 
